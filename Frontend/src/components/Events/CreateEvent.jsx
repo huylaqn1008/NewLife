@@ -1,7 +1,6 @@
-// src/components/CreateEvent.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
-import './CreateEvent.css'; // We'll create this CSS file next
+import './CreateEvent.css';
 
 const CreateEvent = () => {
     const [formData, setFormData] = useState({
@@ -15,7 +14,6 @@ const CreateEvent = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
-    // Handle input changes
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
@@ -24,45 +22,43 @@ const CreateEvent = () => {
         }));
     };
 
-    // Handle file selection
     const handleFileChange = (e) => {
         setImages(e.target.files);
     };
 
-    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setSuccessMessage('');
         setErrorMessage('');
-
+    
         // Validate form data
         if (!formData.eventName || !formData.companyName || !formData.description || !formData.eventDate || images.length === 0) {
-            setErrorMessage('Please fill in all fields and upload at least one image.');
+            setErrorMessage('Vui lòng điền vào tất cả các trường và tải lên ít nhất một hình ảnh.');
             setLoading(false);
             return;
         }
-
+    
         try {
             const data = new FormData();
             data.append('eventName', formData.eventName);
             data.append('companyName', formData.companyName);
             data.append('description', formData.description);
             data.append('eventDate', formData.eventDate);
-
-            // Append each image file
+    
             for (let i = 0; i < images.length; i++) {
                 data.append('images', images[i]);
             }
-
-            // Replace with your backend URL if different
+    
             const response = await axios.post('http://localhost:4000/api/event/create', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-
-            setSuccessMessage('Event created successfully!');
+    
+            setSuccessMessage('Sự kiện đã được tạo thành công!');
+    
+            // Reset form data
             setFormData({
                 eventName: '',
                 companyName: '',
@@ -70,20 +66,26 @@ const CreateEvent = () => {
                 eventDate: '',
             });
             setImages([]);
+    
+            // Reload page after 3 seconds
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+    
         } catch (error) {
             console.error('Error creating event:', error);
-            setErrorMessage(error.response?.data?.message || 'Failed to create event.');
+            setErrorMessage(error.response?.data?.message || 'Khởi tạo sự kiện thất bại.');
         } finally {
             setLoading(false);
         }
-    };
+    };    
 
     return (
         <div className="create-event-container">
             <h2>Create New Event</h2>
             <form onSubmit={handleSubmit} className="create-event-form">
                 <div className="form-group">
-                    <label htmlFor="eventName">Event Name:</label>
+                    <label htmlFor="eventName">Tên sự kiện:</label>
                     <input
                         type="text"
                         id="eventName"
@@ -92,12 +94,12 @@ const CreateEvent = () => {
                         onChange={handleChange}
                         required
                         minLength={5}
-                        placeholder="Enter event name"
+                        placeholder="Nhập tên sự kiện..."
                     />
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="companyName">Company Name:</label>
+                    <label htmlFor="companyName">Tên công ty:</label>
                     <input
                         type="text"
                         id="companyName"
@@ -106,12 +108,12 @@ const CreateEvent = () => {
                         onChange={handleChange}
                         required
                         minLength={5}
-                        placeholder="Enter company name"
+                        placeholder="Nhập tên công ty..."
                     />
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="description">Description:</label>
+                    <label htmlFor="description">Mô tả sự kiện:</label>
                     <textarea
                         id="description"
                         name="description"
@@ -119,24 +121,27 @@ const CreateEvent = () => {
                         onChange={handleChange}
                         required
                         minLength={10}
-                        placeholder="Enter event description"
+                        placeholder="Nhập mô tả..."
                     ></textarea>
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="eventDate">Event Date:</label>
+                    <label htmlFor="eventDate">Ngày tổ chức:</label>
                     <input
-                        type="date"
+                        type="text"
                         id="eventDate"
                         name="eventDate"
                         value={formData.eventDate}
                         onChange={handleChange}
                         required
+                        placeholder="Nhập ngày tổ chức..."
+                        pattern="\d{2}/\d{2}/\d{4}"
+                        title="Vui lòng nhập ngày theo định dạng dd/mm/yyyy"
                     />
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="images">Upload Images:</label>
+                    <label htmlFor="images">Tải ảnh lên:</label>
                     <input
                         type="file"
                         id="images"
@@ -152,7 +157,7 @@ const CreateEvent = () => {
                 {successMessage && <p className="success-message">{successMessage}</p>}
 
                 <button type="submit" disabled={loading}>
-                    {loading ? 'Creating...' : 'Create Event'}
+                    {loading ? 'Đang tạo...' : 'Tạo sự kiện'}
                 </button>
             </form>
         </div>

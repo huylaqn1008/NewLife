@@ -1,21 +1,20 @@
 import mongoose from "mongoose";
-import validator from "validator";
 
 const eventSchema = new mongoose.Schema({
   eventName: {
     type: String,
     required: [true, "Event Name is required"],
-    minLength: [5, "Event Name must contain at least 3 characters!"],
+    minLength: [5, "Tên sự kiện phải chứa ít nhất 5 ký tự!"],
   },
   companyName: {
     type: String,
     required: [true, "Company Name is required"],
-    minLength: [5, "Company Name must contain at least 3 characters!"],
+    minLength: [5, "Tên công ty phải chứa ít nhất 5 ký tự!"],
   },
   description: {
     type: String,
     required: [true, "Event Description is required"],
-    minLength: [10, "Description must contain at least 10 characters!"],
+    minLength: [10, "Mô tả phải chứa ít nhất 10 ký tự!"],
   },
   eventDate: {
     type: Date,

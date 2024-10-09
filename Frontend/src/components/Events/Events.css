@@ -2,19 +2,26 @@
     margin: 80px auto;
     width: 95%;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-start; 
+    justify-content: flex-start; /* Thay đổi từ space-between sang flex-start */
     flex-wrap: wrap;
 }
 
 .event {
     position: relative;
     width: 31%;
-    /* Đặt chiều rộng từng event */
-    margin-bottom: 20px;
+    margin: 0 10px 20px; /* Điều chỉnh khoảng cách giữa các sự kiện */
     overflow: hidden;
-    /* Để đảm bảo phần nội dung không vượt ra ngoài khung */
 }
+
+.event:nth-child(3n+1) {
+    margin-left: 0; /* Bỏ margin trái cho phần tử đầu tiên của mỗi hàng */
+}
+
+.event:nth-child(3n) {
+    margin-right: 0; /* Bỏ margin phải cho phần tử cuối cùng của mỗi hàng */
+}
+
 
 .event img {
     width: 100%;
@@ -23,12 +30,10 @@
     object-fit: cover;
     display: block;
     transition: transform 0.3s ease;
-    /* Hiệu ứng thu phóng hình ảnh khi hover */
 }
 
 .event:hover img {
     transform: scale(1.1);
-    /* Phóng to ảnh khi hover */
 }
 
 .event-info {
@@ -37,27 +42,56 @@
     left: 0;
     right: 0;
     background: rgba(0, 0, 0, 0.7);
-    /* Màu nền mờ */
     color: white;
     padding: 20px;
     transform: translateY(100%);
-    /* Ẩn phần thông tin bằng cách đẩy nó xuống */
     transition: transform 0.3s ease;
-    /* Thêm hiệu ứng khi phần thông tin hiện ra */
 }
 
 .event:hover .event-info {
     transform: translateY(0);
-    /* Khi hover, kéo phần thông tin lên */
 }
 
 .event-info h2 {
     margin: 0;
     font-size: 24px;
-    color: #fc5916;
+    color: #0b99eb;
 }
 
 .event-info p {
     margin: 10px 0 0;
     font-size: 16px;
 }
+
+.pagination-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+}
+
+.pagination button {
+    padding: 10px 15px;
+    margin: 0 5px; /* Điều chỉnh khoảng cách giữa các nút */
+    border: none;
+    background-color: #fc5916;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.pagination button.active {
+    background-color: #0b99eb; /* Màu nền khác cho nút đang hoạt động */
+}
+
+.pagination button:disabled {
+    background-color: grey;
+    cursor: not-allowed;
+}
+

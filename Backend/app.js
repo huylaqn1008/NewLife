@@ -5,31 +5,29 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { DBConnect } from './Database/DB.js';
-import router from './Router/messageRouter.js';
 import eventRouter from './Router/eventRouter.js';
 
 const app = express();
 
-// Initialize environment variables
+// Khởi tạo biến môi trường
 dotenv.config();
 
-// Middleware setup
+// Thiết lập phần mềm trung gian
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Resolve __dirname in ES Modules
+// Giải quyết __dirname trong ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static files from the 'uploads' directory
+// Phục vụ các tệp tĩnh từ thư mục 'uploads'
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Route definitions
-app.use("/api", router);
+// Router
 app.use("/api/event", eventRouter);
 
-// Connect to the database
+// Kết nối với cơ sở dữ liệu
 DBConnect();
 
 export default app;
