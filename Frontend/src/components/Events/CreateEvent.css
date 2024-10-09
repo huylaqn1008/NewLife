@@ -1,0 +1,63 @@
+/* src/components/CreateEvent.css */
+.create-event-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.create-event-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.create-event-form .form-group {
+    margin-bottom: 15px;
+}
+
+.create-event-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.create-event-form input[type="text"],
+.create-event-form input[type="date"],
+.create-event-form textarea,
+.create-event-form input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.create-event-form textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.create-event-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.create-event-form button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.error-message {
+    color: #dc3545;
+    margin-bottom: 10px;
+}
+
+.success-message {
+    color: #28a745;
+    margin-bottom: 10px;
+}
