@@ -3,73 +3,132 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Events = () => {
-    const [eventData, setEventData] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const eventsPerPage = 6; // Số sự kiện mỗi trang
+    const [allEvents, setAllEvents] = useState([]); // Tất cả sự kiện
+    const [currentIndex, setCurrentIndex] = useState(0); // Chỉ số bắt đầu của slide hiện tại
+    const [isPaused, setIsPaused] = useState(false); // Trạng thái tạm dừng slide
 
     useEffect(() => {
         fetchEvents();
     }, []);
 
+    useEffect(() => {
+        if (isPaused) return; // Không thiết lập interval khi đang tạm dừng
+
+        const interval = setInterval(() => {
+            handleShiftRight();
+        }, 5000);
+
+        // Dọn dẹp interval khi component unmount hoặc khi isPaused thay đổi
+        return () => clearInterval(interval);
+    }, [allEvents, currentIndex, isPaused]);
+
     const fetchEvents = async () => {
         try {
             const response = await axios.get('http://localhost:4000/api/event');
             const events = response.data.events;
-    
-            // Lấy ngày hiện tại
+
+            // Sắp xếp theo ngày gần hiện tại
             const currentDate = new Date();
-    
-            // Sắp xếp các sự kiện theo ngày gần với ngày hiện tại nhất
             const sortedEvents = events.sort((a, b) => {
-                const dateA = new Date(a.eventDate); // Chuyển đổi chuỗi ngày thành đối tượng Date
+                const dateA = new Date(a.eventDate);
                 const dateB = new Date(b.eventDate);
-                return Math.abs(dateA - currentDate) - Math.abs(dateB - currentDate); // Sắp xếp theo khoảng cách đến ngày hiện tại
+                return Math.abs(dateA - currentDate) - Math.abs(dateB - currentDate);
             });
-    
-            setEventData(sortedEvents);
+
+            // Lấy 6 sự kiện đầu tiên
+            setAllEvents(sortedEvents.slice(0, 6));
         } catch (error) {
             console.error('Error fetching events:', error);
         }
-    };    
+    };
 
-    // Tính toán các sự kiện cho trang hiện tại
-    const indexOfLastEvent = currentPage * eventsPerPage;
-    const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-    const currentEvents = eventData.slice(indexOfFirstEvent, indexOfLastEvent);
+    // Hàm lấy 5 sự kiện hiện tại dựa trên currentIndex
+    const getCurrentEvents = () => {
+        if (allEvents.length === 0) return [];
 
-    // Tính toán tổng số trang
-    const totalPages = Math.ceil(eventData.length / eventsPerPage);
+        let current = [];
+        for (let i = 0; i < 5; i++) {
+            current.push(allEvents[(currentIndex + i) % allEvents.length]);
+        }
+        return current;
+    };
+
+    const currentEvents = getCurrentEvents();
+
+    // Hàm chuyển slide sang trái (hiển thị sự kiện trước đó)
+    const handleShiftLeft = () => {
+        setCurrentIndex((prevIndex) => (prevIndex - 1 + allEvents.length) % allEvents.length);
+    };
+
+    // Hàm chuyển slide sang phải (hiển thị sự kiện tiếp theo)
+    const handleShiftRight = () => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % allEvents.length);
+    };
 
     return (
-        <div className='events'>
-            {currentEvents.map(event => (
-                <div key={event._id} className='event'>
-                    {event.images.length > 0 ? (
-                        <img 
-                            src={`http://localhost:4000/${event.images[0]}`} 
-                            alt={event.eventName} 
-                        />
-                    ) : (
-                        <p>No image available</p>
-                    )}
-                    <div className='event-info'>
-                        <h2>{event.eventName}</h2>
-                        <p>{event.description}</p> 
-                    </div>
-                </div>
-            ))}
-            <div className='pagination-container'>
-                <div className='pagination'>
-                    {Array.from({ length: totalPages }, (_, index) => (
-                        <button
-                            key={index + 1}
-                            onClick={() => setCurrentPage(index + 1)}
-                            className={currentPage === index + 1 ? 'active' : ''}
+        <div className='slider-container'>
+            <button className='nav-button left-button' onClick={handleShiftLeft}>
+                &#8592;
+            </button>
+            <div className='events'>
+                {currentEvents.map((event, index) => {
+                    // Xác định lớp dựa trên vị trí
+                    let positionClass = '';
+                    switch(index) {
+                        case 0:
+                            positionClass = 'left-small';
+                            break;
+                        case 1:
+                            positionClass = 'left-medium';
+                            break;
+                        case 2:
+                            positionClass = 'center-large';
+                            break;
+                        case 3:
+                            positionClass = 'right-medium';
+                            break;
+                        case 4:
+                            positionClass = 'right-small';
+                            break;
+                        default:
+                            positionClass = '';
+                    }
+
+                    const isCenter = index === 2; // Xác định sự kiện ở giữa
+
+                    return (
+                        <div
+                            key={event._id}
+                            className={`event ${positionClass}`}
+                            onMouseEnter={isCenter ? () => setIsPaused(true) : undefined}
+                            onMouseLeave={isCenter ? () => setIsPaused(false) : undefined}
                         >
-                            {index + 1}
-                        </button>
-                    ))}
-                </div>
+                            {event.images.length > 0 ? (
+                                <img
+                                    src={`http://localhost:4000/${event.images[0]}`}
+                                    alt={event.eventName}
+                                    loading="lazy"
+                                />
+                            ) : (
+                                <p>No image available</p>
+                            )}
+                            <div className='event-info'>
+                                <h2>{event.eventName}</h2>
+                                <p>{event.description}</p>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+            <button className='nav-button right-button' onClick={handleShiftRight}>
+                &#8594;
+            </button>
+
+            {/* Nút xem thêm nằm dưới các sự kiện */}
+            <div className='show-more-container'>
+                <button className='show-more-button'>
+                    Xem thêm
+                </button>
             </div>
         </div>
     );

@@ -1,3 +1,4 @@
+// CreateEvent.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import './CreateEvent.css';
@@ -44,7 +45,7 @@ const CreateEvent = () => {
             data.append('eventName', formData.eventName);
             data.append('companyName', formData.companyName);
             data.append('description', formData.description);
-            data.append('eventDate', formData.eventDate);
+            data.append('eventDate', formData.eventDate); // Định dạng yyyy-mm-dd
     
             for (let i = 0; i < images.length; i++) {
                 data.append('images', images[i]);
@@ -128,15 +129,14 @@ const CreateEvent = () => {
                 <div className="form-group">
                     <label htmlFor="eventDate">Ngày tổ chức:</label>
                     <input
-                        type="text"
+                        type="date" // Thay đổi từ "text" sang "date"
                         id="eventDate"
                         name="eventDate"
                         value={formData.eventDate}
                         onChange={handleChange}
                         required
                         placeholder="Nhập ngày tổ chức..."
-                        pattern="\d{2}/\d{2}/\d{4}"
-                        title="Vui lòng nhập ngày theo định dạng dd/mm/yyyy"
+                        // Không cần pattern và title khi sử dụng type="date"
                     />
                 </div>
 
