@@ -1,0 +1,75 @@
+.service-section {
+  padding: 10px;
+  padding-top: 50px;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 30, 1) 100%);
+  text-align: center;
+}
+
+.service-title {
+  color: aqua;
+  font-size: 48px;
+  margin-bottom: 50px;
+  text-transform: uppercase;
+}
+
+.service-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Mặc định sẽ có 4 cột */
+  grid-gap: 20px;
+}
+
+.service-box {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  color: white;
+  transition: transform 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.service-box:hover {
+  transform: scale(1.05);
+  background-color: rgb(17, 155, 173);
+}
+
+.service-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.service-name {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.service-description {
+  font-size: 14px;
+}
+
+/* Media query để khi thu nhỏ màn hình thì thành 1 cột */
+@media (max-width: 768px) {
+  .service-container {
+    grid-template-columns: 1fr; /* Chuyển về 1 cột */
+  }
+
+  .service-title {
+    font-size: 36px; /* Giảm kích thước tiêu đề để phù hợp với màn hình nhỏ */
+  }
+
+  .service-box {
+    padding: 15px; /* Thu nhỏ khoảng cách padding cho phù hợp với màn hình nhỏ */
+  }
+
+  .service-icon {
+    font-size: 35px; /* Giảm kích thước icon */
+  }
+
+  .service-name {
+    font-size: 16px; /* Giảm kích thước chữ */
+  }
+
+  .service-description {
+    font-size: 12px; /* Giảm kích thước mô tả */
+  }
+}

@@ -8,7 +8,8 @@ const Navbar = () => {
             <ul>
                 <li>Trang chủ</li>
                 <li>Thông tin</li>
-                <li>Các sự kiện</li>
+                <li>Sự kiện</li>
+                <li>Dịch vụ</li>
                 <li>Phản hổi của khách hàng</li>
                 <li>
                     <button className='btn'>Liên hệ</button>
