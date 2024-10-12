@@ -1,9 +1,10 @@
-import Body from "./components/Body/Body"
-import CreateEvent from "./components/Events/CreateEvent"
-import Events from "./components/Events/Events"
-import Navbar from "./components/Navbar/Navbar"
-import Service from "./components/Services/Service"
-import Tittle from "./components/Tittle/Tittle"
+import Body from "./components/Body/Body";
+import Customers from "./components/Customers/Customers";
+import CreateEvent from "./components/Events/CreateEvent";
+import Events from "./components/Events/Events";
+import Navbar from "./components/Navbar/Navbar";
+import Service from "./components/Services/Service";
+import Tittle from "./components/Tittle/Tittle";
 
 const App = () => {
   return (
@@ -15,9 +16,10 @@ const App = () => {
         <Events />
         <CreateEvent />
       </div>
-      <Service/>
+      <Service />
+      <Customers />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
