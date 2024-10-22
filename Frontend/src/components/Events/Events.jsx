@@ -1,137 +1,129 @@
-import './Events.css';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import "../../../tailwind.css";
+
+const Card = ({ image, name, description }) => {
+  return (
+    <div
+      className={`relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 ease-in-out w-64 h-80 transform hover:scale-105`}
+      style={{ aspectRatio: "3/4" }}
+    >
+      <img
+        src={image}
+        alt={name}
+        className="w-full h-full object-cover"
+        loading="lazy"
+      />
+      <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+        <h3 className="text-white text-lg font-semibold mb-1">{name}</h3>
+        <p className="text-white text-sm">{description}</p>
+      </div>
+    </div>
+  );
+};
 
 const Events = () => {
-    const [allEvents, setAllEvents] = useState([]); // Tất cả sự kiện
-    const [currentIndex, setCurrentIndex] = useState(0); // Chỉ số bắt đầu của slide hiện tại
-    const [isPaused, setIsPaused] = useState(false); // Trạng thái tạm dừng slide
+  const [events, setEvents] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
 
-    useEffect(() => {
-        fetchEvents();
-    }, []);
-
-    useEffect(() => {
-        if (isPaused) return; // Không thiết lập interval khi đang tạm dừng
-
-        const interval = setInterval(() => {
-            handleShiftRight();
-        }, 5000);
-
-        // Dọn dẹp interval khi component unmount hoặc khi isPaused thay đổi
-        return () => clearInterval(interval);
-    }, [allEvents, currentIndex, isPaused]);
-
+  useEffect(() => {
+    // Lấy dữ liệu sự kiện từ backend
     const fetchEvents = async () => {
-        try {
-            const response = await axios.get('http://localhost:4000/api/event');
-            const events = response.data.events;
-
-            // Sắp xếp theo ngày gần hiện tại
-            const currentDate = new Date();
-            const sortedEvents = events.sort((a, b) => {
-                const dateA = new Date(a.eventDate);
-                const dateB = new Date(b.eventDate);
-                return Math.abs(dateA - currentDate) - Math.abs(dateB - currentDate);
-            });
-
-            // Lấy 6 sự kiện đầu tiên
-            setAllEvents(sortedEvents.slice(0, 6));
-        } catch (error) {
-            console.error('Error fetching events:', error);
-        }
+      try {
+        const response = await axios.get("http://localhost:4000/api/event");
+        setEvents(response.data.events);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
     };
 
-    // Hàm lấy 5 sự kiện hiện tại dựa trên currentIndex
-    const getCurrentEvents = () => {
-        if (allEvents.length === 0) return [];
+    fetchEvents();
+  }, []);
 
-        let current = [];
-        for (let i = 0; i < 5; i++) {
-            current.push(allEvents[(currentIndex + i) % allEvents.length]);
-        }
-        return current;
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 768);
     };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-    const currentEvents = getCurrentEvents();
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === events.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 5000); // Chuyển đổi sau mỗi 5 giây
 
-    // Hàm chuyển slide sang trái (hiển thị sự kiện trước đó)
-    const handleShiftLeft = () => {
-        setCurrentIndex((prevIndex) => (prevIndex - 1 + allEvents.length) % allEvents.length);
-    };
+    return () => clearInterval(intervalId);
+  }, [events]);
 
-    // Hàm chuyển slide sang phải (hiển thị sự kiện tiếp theo)
-    const handleShiftRight = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % allEvents.length);
-    };
-
-    return (
-        <div className='slider-container'>
-            <button className='nav-button left-button' onClick={handleShiftLeft}>
-                &#8592;
-            </button>
-            <div className='events'>
-                {currentEvents.map((event, index) => {
-                    // Xác định lớp dựa trên vị trí
-                    let positionClass = '';
-                    switch(index) {
-                        case 0:
-                            positionClass = 'left-small';
-                            break;
-                        case 1:
-                            positionClass = 'left-medium';
-                            break;
-                        case 2:
-                            positionClass = 'center-large';
-                            break;
-                        case 3:
-                            positionClass = 'right-medium';
-                            break;
-                        case 4:
-                            positionClass = 'right-small';
-                            break;
-                        default:
-                            positionClass = '';
-                    }
-
-                    const isCenter = index === 2; // Xác định sự kiện ở giữa
-
-                    return (
-                        <div
-                            key={event._id}
-                            className={`event ${positionClass}`}
-                            onMouseEnter={isCenter ? () => setIsPaused(true) : undefined}
-                            onMouseLeave={isCenter ? () => setIsPaused(false) : undefined}
-                        >
-                            {event.images.length > 0 ? (
-                                <img
-                                    src={`http://localhost:4000/${event.images[0]}`}
-                                    alt={event.eventName}
-                                    loading="lazy"
-                                />
-                            ) : (
-                                <p>No image available</p>
-                            )}
-                            <div className='event-info'>
-                                <h2>{event.eventName}</h2>
-                                <p>{event.description}</p>
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
-            <button className='nav-button right-button' onClick={handleShiftRight}>
-                &#8594;
-            </button>
-
-            {/* Nút xem thêm nằm dưới các sự kiện */}
-            <div className='show-more-container'>
-                <button className='show-more-button'>
-                    Xem thêm
-                </button>
-            </div>
-        </div>
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? events.length - 1 : prevIndex - 1
     );
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === events.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const getVisibleCards = () => {
+    if (isSmallScreen) {
+      return events[currentIndex] ? [events[currentIndex]] : [];
+    }
+    const visibleCards = [];
+    for (let i = -2; i <= 2; i++) {
+      const index = (currentIndex + i + events.length) % events.length;
+      if (
+        events[index] &&
+        events[index].images &&
+        events[index].images.length > 0
+      ) {
+        visibleCards.push(events[index]);
+      }
+    }
+    return visibleCards;
+  };
+
+  return (
+    <div className="relative w-full mx-auto px-4 py-8">
+      <div className="flex items-center justify-center space-x-4 overflow-hidden">
+        {getVisibleCards().map((event) => (
+          <Card
+            key={event._id} // Sử dụng _id từ MongoDB
+            image={
+              event.images && event.images.length > 0
+                ? `http://localhost:4000/${event.images[0]}`
+                : ""
+            }
+            // Đường dẫn hình ảnh đầu tiên
+            name={event.eventName}
+            description={event.description}
+          />
+        ))}
+      </div>
+      <button
+        onClick={handlePrev}
+        className="absolute left-10 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+        aria-label="Previous card"
+      >
+        <FaChevronLeft className="text-gray-800 text-2xl" />
+      </button>
+      <button
+        onClick={handleNext}
+        className="absolute right-10 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+        aria-label="Next card"
+      >
+        <FaChevronRight className="text-gray-800 text-2xl" />
+      </button>
+    </div>
+  );
 };
 
 export default Events;

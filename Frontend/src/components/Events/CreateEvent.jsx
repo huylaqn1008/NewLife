@@ -33,19 +33,22 @@ const CreateEvent = () => {
         setSuccessMessage('');
         setErrorMessage('');
     
-        // Validate form data
         if (!formData.eventName || !formData.companyName || !formData.description || !formData.eventDate || images.length === 0) {
             setErrorMessage('Vui lòng điền vào tất cả các trường và tải lên ít nhất một hình ảnh.');
             setLoading(false);
             return;
         }
     
+        // Chuyển đổi ngày nếu cần
+        const [day, month, year] = formData.eventDate.split('/');
+        const formattedDate = `${year}-${month}-${day}`; // Chuyển đổi thành yyyy-mm-dd
+    
         try {
             const data = new FormData();
             data.append('eventName', formData.eventName);
             data.append('companyName', formData.companyName);
             data.append('description', formData.description);
-            data.append('eventDate', formData.eventDate); // Định dạng yyyy-mm-dd
+            data.append('eventDate', formattedDate); // Sử dụng ngày đã được chuyển đổi
     
             for (let i = 0; i < images.length; i++) {
                 data.append('images', images[i]);
@@ -58,8 +61,7 @@ const CreateEvent = () => {
             });
     
             setSuccessMessage('Sự kiện đã được tạo thành công!');
-    
-            // Reset form data
+            
             setFormData({
                 eventName: '',
                 companyName: '',
@@ -67,8 +69,7 @@ const CreateEvent = () => {
                 eventDate: '',
             });
             setImages([]);
-    
-            // Reload page after 3 seconds
+            
             setTimeout(() => {
                 window.location.reload();
             }, 3000);
@@ -79,7 +80,7 @@ const CreateEvent = () => {
         } finally {
             setLoading(false);
         }
-    };    
+    };       
 
     return (
         <div className="create-event-container">

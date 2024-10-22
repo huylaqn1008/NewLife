@@ -1,5 +1,6 @@
 import Body from "./components/Body/Body";
-import Customers from "./components/Customers/Customers";
+import CustomerComments from "./components/Customers/Customers";
+import Partners from "./components/Customers/Partners";
 import CreateEvent from "./components/Events/CreateEvent";
 import Events from "./components/Events/Events";
 import Navbar from "./components/Navbar/Navbar";
@@ -11,13 +12,12 @@ const App = () => {
     <div>
       <Navbar />
       <Body />
-      <div className="container">
-        <Tittle />
-        <Events />
-        <CreateEvent />
-      </div>
+      <Tittle />
+      <Events />
+      <CreateEvent />
       <Service />
-      <Customers />
+      <Partners />
+      <CustomerComments />
     </div>
   );
 };
