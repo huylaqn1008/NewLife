@@ -89,7 +89,7 @@ const CustomerComments = () => {
   }
 
   return (
-    <div className="relative bg-white flex flex-col items-center justify-center p-4">
+    <div id="customer" className="relative bg-white flex flex-col items-center justify-center p-4">
       <h1 className="text-[48px] font-bold text-[#fc5916] mb-4 mt-5">Ý KIẾN KHÁCH HÀNG</h1>
       <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform hover:scale-105">
         <div className="p-8">

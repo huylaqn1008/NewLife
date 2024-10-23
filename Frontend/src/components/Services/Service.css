@@ -1,3 +1,9 @@
+/* File: Service.css (hoặc global.css) */
+
+#service {
+  scroll-margin-top: 100px; /* Đảm bảo nó không bị che bởi navbar */
+}
+
 .service-section {
   padding: 10px;
   padding-top: 50px;
@@ -41,8 +47,10 @@
 }
 
 .service-name {
-  font-size: 18px;
+  font-size: 22px;
   margin-bottom: 5px;
+  color: #FF8C00 ;
+  font-weight: 600;
 }
 
 .service-description {

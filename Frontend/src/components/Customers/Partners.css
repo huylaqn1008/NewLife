@@ -1,10 +1,17 @@
+#partner {
+    scroll-margin-top: 500px;
+    /* Đảm bảo nó không bị che bởi navbar */
+}
+
 .partners-slider-container {
     max-width: 100%;
     overflow: hidden;
     background-color: #f7fafc;
     padding: 2.5rem 0;
     text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng đổ bóng */
 }
+
 
 .slider-title {
     color: #fc5916;
@@ -25,6 +32,7 @@
     /* 5 partners visible at a time */
     padding: 0 1rem;
     transition: transform 0.3s;
+    border-radius: 8px;
 }
 
 .partner-card:hover {

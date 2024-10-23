@@ -1,5 +1,5 @@
 import React from "react";
-import "./Service.css"; // Đảm bảo bạn tạo file CSS để styling
+import "./Service.css";
 
 const services = [
   {
@@ -54,7 +54,7 @@ const services = [
 
 const Service = () => {
   return (
-    <div className="service-section">
+    <div id="service" className="service-section">
       <h1 className="service-title">Các dịch vụ</h1>
       <div className="service-container">
         {services.map((service, index) => (

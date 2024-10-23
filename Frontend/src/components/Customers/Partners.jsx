@@ -24,77 +24,62 @@ const Partners = () => {
   const partners = [
     {
       id: 1,
-      name: "Kem đánh răng PS",
       logo: PS,
     },
     {
       id: 2,
-      name: "Dầu gội Dove",
       logo: Dove,
     },
     {
       id: 3,
-      name: "Viettel",
       logo: Viettel,
     },
     {
       id: 4,
-      name: "Băng vệ sing Diana",
       logo: Diana,
     },
     {
       id: 5,
-      name: "Xe hơi Toyota",
       logo: Toyota,
     },
     {
       id: 6,
-      name: "Unilever Group",
       logo: Unilever,
     },
     {
       id: 7,
-      name: "Công ty cổ phần Uniben",
       logo: Uniben,
     },
     {
       id: 8,
-      name: "Dầu gọi Clear",
       logo: Clear,
     },
     {
       id: 9,
-      name: "Công ty TNHH Nestlé Việt Nam",
       logo: Nestle,
     },
     {
       id: 10,
-      name: "Ngân hàng tiên phong TPBank",
       logo: TPBank,
     },
     {
       id: 11,
-      name: "Bia Carlsberg",
       logo: Carlsberg,
     },
     {
       id: 12,
-      name: "Xe hơi Vinfast",
       logo: Vinfast,
     },
     {
       id: 13,
-      name: "Xe hơi Mercedes",
       logo: Mercedes,
     },
     {
       id: 14,
-      name: "Điện thoại SAMSUNG",
       logo: Samsung,
     },
     {
       id: 15,
-      name: "Công ty TNHH Colgate-Palmolive Việt Nam",
       logo: Colgate,
     },
   ];
@@ -117,17 +102,17 @@ const Partners = () => {
   }, [currentIndex]);
 
   return (
-    <div className="partners-slider-container">
+    <div id="partner" className="partners-slider-container">
       <h2 className="slider-title">Đối tác</h2>
       <div className="partners-slider" ref={sliderRef}>
         {partners.map((partner) => (
           <div key={partner.id} className="partner-card">
             <img
               src={partner.logo}
-              alt={partner.name}
+              alt={`Logo ${partner.id}`}
               className="partner-logo"
             />
-            <p className="partner-name">{partner.name}</p>
+            {/* Đã xóa phần hiển thị tên */}
           </div>
         ))}
       </div>
