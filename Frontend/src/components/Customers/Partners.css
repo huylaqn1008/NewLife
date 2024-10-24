@@ -1,5 +1,5 @@
 #partner {
-    scroll-margin-top: 500px;
+    scroll-margin-top: 100px;
     /* Đảm bảo nó không bị che bởi navbar */
 }
 
@@ -7,11 +7,10 @@
     max-width: 100%;
     overflow: hidden;
     background-color: #f7fafc;
-    padding: 2.5rem 0;
+    padding-top: 50px;
     text-align: center;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng đổ bóng */
 }
-
 
 .slider-title {
     color: #fc5916;
@@ -24,6 +23,7 @@
 .partners-slider {
     display: flex;
     transition: transform 0.3s ease-in-out;
+    padding-bottom: 50px;
 }
 
 .partner-card {

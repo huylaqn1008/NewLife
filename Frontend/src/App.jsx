@@ -1,4 +1,6 @@
 import Body from "./components/Body/Body";
+import ContactButtons from "./components/ButtonScreen/ContactBurron";
+import ScrollToTopButton from "./components/ButtonScreen/ScrollToTopButton";
 import CustomerComments from "./components/Customers/Customers";
 import Partners from "./components/Customers/Partners";
 import CreateEvent from "./components/Events/CreateEvent";
@@ -14,14 +16,14 @@ const App = () => {
       <Navbar />
       <Body />
       <Tittle />
-      <div className="pb-10">
       <Events />
-      </div>
       <CreateEvent />
       <Service id="service" />
       <Partners id="partner" />
       <CustomerComments id="customer" />
       <Footer />
+      <ContactButtons />
+      <ScrollToTopButton />
     </div>
   );
 };
