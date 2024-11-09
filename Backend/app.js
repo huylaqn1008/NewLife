@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { DBConnect } from './Database/DB.js';
 import eventRouter from './Router/eventRouter.js';
+import sendEmailRouter from './Router/sendEmailRouter.js';
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Router
 app.use("/api/event", eventRouter);
+app.use("/api", sendEmailRouter)
 
 // Kết nối với cơ sở dữ liệu
 DBConnect();
